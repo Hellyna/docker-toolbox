@@ -1,0 +1,37 @@
+#!/bin/bash
+
+set -e
+rm -f /root/run
+
+DEBIAN_FRONTEND='noninteractive'
+apt_get_install='apt-get install -y --no-install-recommends'
+
+
+echo \
+  'deb http://http.debian.net/debian jessie-backports main' > \
+  /etc/apt/sources.list.d/jessie-backports.list
+
+apt-get update
+
+$apt_get_install docker.io
+
+$apt_get_install \
+  ack-grep \
+  ctags \
+  curl \
+  git \
+  rake \
+  ruby \
+  vim
+
+curl -L https://raw.githubusercontent.com/carlhuda/janus/master/bootstrap.sh | bash
+
+apt-get autoremove -y
+apt-get clean -y
+rm -rvf \
+  /tmp/* \
+  /var/lib/apt/lists/* \
+  /var/tmp/*
+
+set +e
+
